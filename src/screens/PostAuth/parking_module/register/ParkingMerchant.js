@@ -81,7 +81,6 @@ const ParkingMerchant = props => {
     }, []),
   );
 
-  const BASE_URL = 'http://165.22.62.238';
 
   const fetchStateList = async () => {
     let response = await GETCALL('api/state-list');
@@ -94,10 +93,12 @@ const ParkingMerchant = props => {
       };
       return newObj;
     });
+    console.log(newArray)
     setStateList(newArray);
   };
 
   const selectState = item => {
+    console.log("select state is clicked")
     if (fullData.length > 0 && item) {
       const newCityList = filter(
         fullData,

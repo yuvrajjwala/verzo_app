@@ -30,6 +30,8 @@ const UserMenu = ({ navigation }) => {
           <Text style={styles.boxText}>My Order</Text>
         </TouchableOpacity>
         <View style={{ width: 5 }} />
+
+
         <TouchableOpacity
           onPress={() => {
             navigation.navigate("DryCleanerList");
@@ -38,6 +40,8 @@ const UserMenu = ({ navigation }) => {
         >
           <Text style={styles.boxText}>Book Dry Cleaner</Text>
         </TouchableOpacity>
+
+
         <View style={{ width: 5 }} />
         <TouchableOpacity
           onPress={() => {
@@ -49,6 +53,8 @@ const UserMenu = ({ navigation }) => {
           <Text style={styles.boxText}>Book a parking</Text>
         </TouchableOpacity>
       </View>
+
+      
       <View style={styles.container}>
         <TouchableOpacity
           onPress={() => navigation.navigate("BookingListUser")}
@@ -59,6 +65,8 @@ const UserMenu = ({ navigation }) => {
           </Text>
         </TouchableOpacity>
       </View>
+
+      
       <Modal
         animationType="fade"
         transparent={true}

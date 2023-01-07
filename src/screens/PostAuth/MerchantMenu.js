@@ -104,6 +104,7 @@ const MerchantMenu = ({ navigation }) => {
             Parking Merchant
           </Text>
         </TouchableOpacity>
+        
         <View style={{ width: 5 }} />
         <TouchableOpacity
           onPress={() => navigation.navigate("BookingListMerchant")}

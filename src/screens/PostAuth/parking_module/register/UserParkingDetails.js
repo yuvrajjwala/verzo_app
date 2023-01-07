@@ -74,6 +74,7 @@ const UserParkingDetails = (props) => {
           Parking_spot_price: response.responseData.booking_details.spotPrice,
           user_id: response.responseData.booking_details.userId,
           parking_spot_name: response.responseData.booking_details.spotName,
+          bookingType:"prk"
         };
         // console.log(bookingDetails);
         props.navigation.navigate({

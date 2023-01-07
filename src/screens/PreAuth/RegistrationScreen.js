@@ -36,7 +36,7 @@ const RegistrationScreen = ({ navigation }) => {
             }
 
             try {
-                let response  = await POSTCALL('auth/signup', params);
+                let response  = await POSTCALL('api/signup', params);
                 
                 setError(false);
                 setLoading(false);

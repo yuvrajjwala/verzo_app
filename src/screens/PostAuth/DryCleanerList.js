@@ -28,7 +28,7 @@ const DryCleanerList = ({ navigation }) => {
     const fetchDrycleanerList = async (selectedCity) => {
         let data = await retrieveData('userdetails');
         if (data && data.token) {
-            let response = await GETCALL(`search-dry-cleaner?cityName=${selectedCity}`, data.token);
+            let response = await GETCALL(`api/search-dry-cleaner?cityName=${selectedCity}`, data.token);
             console.log(JSON.stringify(response,null,4));
             if (response.responseData.success) {
                 disPatch(setDrycleanerList(response.responseData.data))
@@ -41,7 +41,7 @@ const DryCleanerList = ({ navigation }) => {
     }, []))
 
     const fetchStateList = async () => {
-        let response = await GETCALL('state-list');
+        let response = await GETCALL('api/state-list');
         let stateList = response.responseData;
         setStateList(stateList)
     }
