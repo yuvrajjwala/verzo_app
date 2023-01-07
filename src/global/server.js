@@ -5,8 +5,8 @@ const URL = {
   DEVELOPMENT_DRYCLEANING: "https://vervover-dry-cleaning.herokuapp.com/api/",
   PRODUCTION: "http://165.22.62.238/api/",
   // PRODUCTION: 'http://18.212.85.170:6000/',
-  // TEST: "https://vervover-dry-cleaning.herokuapp.com/",
-  TEST: "http://192.168.127.200/",
+  TEST: "https://vervover-dry-cleaning.herokuapp.com/",
+  // TEST: "http://192.168.28.200/",
 };
 
 export const BASE_URL = `${URL.TEST}`;
@@ -27,13 +27,13 @@ export const GETCALL = async (apiUrl, token = null) => {
     headerObj = {
       ...headerObj,
       "x-access-token": token,
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     };
   }
   let getCallRes = await axios.get(`${BASE_URL}${apiUrl}`, {
     headers: headerObj,
   });
-  console.log("get call working")
+  console.log("get call working");
   return {
     status: getCallRes.status,
     responseData: getCallRes.data,
@@ -54,19 +54,16 @@ export const POSTCALL = async (apiUrl, bodyData, token = null, type = null) => {
       "Content-Type": "multipart/form-data",
     };
   }
-  try{
-    let postCallRes = await axios
-    .post( "http://192.168.127.200/" + apiUrl + "/", bodyData, {
+  try {
+    let postCallRes = await axios.post(`${BASE_URL}${apiUrl}/`, bodyData, {
       headers: headerObj,
-    }) 
-    console.log("result"+postCallRes)
+    });
+    console.log("result" + postCallRes);
     return {
       status: postCallRes.status,
       responseData: postCallRes.data,
     };
+  } catch (error) {
+    console.log(err);
   }
-  catch(error){
-    console.log(err)
-  }
-  
 };

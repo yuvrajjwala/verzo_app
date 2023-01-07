@@ -66,7 +66,9 @@ const MerchantMenu = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1, backgroundColor: Colors.WHITE }}>
+    <KeyboardAvoidingView
+      style={{ flex: 1, backgroundColor: Colors.WHITE, marginTop: 20 }}
+    >
       {/* <Spinner visible={loader} textContent={"Loading..."} /> */}
       <FocusAwareStatusBar isLightBar={false} isTopSpace={true} />
       <View style={styles.container}>
@@ -76,7 +78,7 @@ const MerchantMenu = ({ navigation }) => {
           }}
           style={styles.box}
         >
-          <Text style={styles.boxText}>My Order</Text>
+          <Text style={styles.boxText}>Bookings For Dry Cleaner</Text>
         </TouchableOpacity>
         <View style={{ width: 5 }} />
         <TouchableOpacity onPress={getMerchantProfile} style={styles.box}>
@@ -104,14 +106,14 @@ const MerchantMenu = ({ navigation }) => {
             Parking Merchant
           </Text>
         </TouchableOpacity>
-        
+
         <View style={{ width: 5 }} />
         <TouchableOpacity
           onPress={() => navigation.navigate("BookingListMerchant")}
           style={styles.box}
         >
           <Text adjustsFontSizeToFit style={styles.boxText}>
-            Booking List
+            Bookings For Parking Spots
           </Text>
         </TouchableOpacity>
       </View>

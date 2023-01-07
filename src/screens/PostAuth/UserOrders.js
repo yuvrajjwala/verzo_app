@@ -18,7 +18,7 @@ import { GETCALL, POSTCALL } from "../../global/server";
 const UserOrders = ({ navigation }) => {
   const [loader, setLoader] = React.useState(false);
   const [orders, setOrders] = React.useState([]);
-
+  const [otpMap, setOtpMap] = React.useState();
   useFocusEffect(
     React.useCallback(() => {
       fetchOrders();
@@ -32,7 +32,8 @@ const UserOrders = ({ navigation }) => {
       let response = await GETCALL("api/users/orders", data.token);
       setLoader(false);
       if (response.responseData.success) {
-        setOrders(response.responseData.data);
+        setOtpMap(response.responseData.data.otpMap);
+        setOrders(response.responseData.data.model);
       }
     }
   };
@@ -157,9 +158,37 @@ const UserOrders = ({ navigation }) => {
               textTransform: "capitalize",
             }}
           >
-            {item.paymentStatus}
+            Paid
           </Text>
         </View>
+
+        <View style={{ height: 10 }} />
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Text
+            style={{ color: Colors.GREEN, fontSize: 20, fontWeight: "bold" }}
+          >
+            OTP
+          </Text>
+          <Text
+            style={{
+              color: Colors.GREEN,
+              fontSize: 20,
+              fontWeight: "bold",
+              textTransform: "capitalize",
+            }}
+          >
+            {otpMap.find((otpMapObj) => otpMapObj.bookingId === item._id)
+              ? otpMap.find((otpMapObj) => otpMapObj.bookingId === item._id).otp
+              : "2134"}
+          </Text>
+        </View>
+
         <View style={{ height: 10 }} />
         <View style={{ height: 1, backgroundColor: Colors.BORDER }} />
         <View style={{ height: 10 }} />

@@ -20,6 +20,7 @@ const UserMenu = ({ navigation }) => {
   return (
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: Colors.WHITE }}>
       <FocusAwareStatusBar isLightBar={false} isTopSpace={true} />
+
       <View style={styles.container}>
         <TouchableOpacity
           onPress={() => {
@@ -27,10 +28,9 @@ const UserMenu = ({ navigation }) => {
           }}
           style={styles.box}
         >
-          <Text style={styles.boxText}>My Order</Text>
+          <Text style={styles.boxText}>My Booking List - Dry Cleaning</Text>
         </TouchableOpacity>
         <View style={{ width: 5 }} />
-
 
         <TouchableOpacity
           onPress={() => {
@@ -40,12 +40,21 @@ const UserMenu = ({ navigation }) => {
         >
           <Text style={styles.boxText}>Book Dry Cleaner</Text>
         </TouchableOpacity>
+      </View>
 
-
+      <View style={styles.container}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("BookingListUser")}
+          style={styles.box}
+        >
+          <Text adjustsFontSizeToFit style={styles.boxText}>
+            My Booking List - car Parking
+          </Text>
+        </TouchableOpacity>
         <View style={{ width: 5 }} />
+
         <TouchableOpacity
           onPress={() => {
-            // navigation.navigate("BookingUserList");
             setModalVisible(true);
           }}
           style={styles.box}
@@ -54,19 +63,6 @@ const UserMenu = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      
-      <View style={styles.container}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("BookingListUser")}
-          style={styles.box}
-        >
-          <Text adjustsFontSizeToFit style={styles.boxText}>
-            Booking List
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      
       <Modal
         animationType="fade"
         transparent={true}

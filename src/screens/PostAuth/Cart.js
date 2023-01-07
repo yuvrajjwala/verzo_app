@@ -26,6 +26,7 @@ import { setSelectedDryCleaner } from "../../state/reducers/DrycleanerReducer";
 const Cart = ({ navigation }) => {
   const [displayStatus, setDisplayStatus] = React.useState("none");
   const [paymentIntent, setPaymentIntent] = React.useState("");
+  const [response, setResponse] = React.useState();
 
   const { cartList } = useSelector((state) => state.cartReducer);
   const { selectedDryCleaner } = useSelector(
@@ -271,31 +272,32 @@ const Cart = ({ navigation }) => {
 
   const handlePayemnt = async () => {
     // sending other details for a success order and booking placement .
-
-    // const bookingDetails = {
-    //     booking_id: response.responseData.parking_booking_id,
-    //     Parking_spot_price: response.responseData.booking_details.spotPrice,
-    //     user_id: response.responseData.booking_details.userId,
-    //     parking_spot_name: response.responseData.booking_details.spotName,
-    //     bookingType:"dryc"
-    //   };
-    //   console.log(bookingDetails);
-    // props.navigation.navigate({
-    //   name: "PaymentScreen",
-    //   params: { booking_details: bookingDetails },
-    // });
+    console.log(response);
+    // {"dry_cleaning_booking_by_id": "63b926c5092e9b6fbc3845ea", "dry_cleaning_booking_id": "63b9ab477ebea46abb29bbae", "dry_cleaning_booking_total_price": "6", "msg": "Order placed successfully", "success": true}
+    const bookingDetails = {
+      booking_id: response.dry_cleaning_booking_id,
+      Parking_spot_price: response.dry_cleaning_booking_total_price,
+      user_id: response.dry_cleaning_booking_by_id,
+      parking_spot_name: "dry cleaning",
+      bookingType: "dryc",
+    };
 
     const user_tok = await retrieveData("userdetails");
     console.log(paymentIntent);
-    await POSTCALL(
+    const successfullBooking = await POSTCALL(
       "api/complete-order",
       {
         paymentIntent: paymentIntent,
-        ...route.params,
+        booking_details: bookingDetails,
       },
       user_tok.token
     );
-    // navigation.navigate("BookingListUser");
+    console.log(successfullBooking.responseData);
+    alert(
+      "Please keep you otp safe. Your one time otp : " +
+        successfullBooking.responseData.msg
+    );
+    navigation.navigate("UserMenu");
   };
 
   const bookOrder = async () => {
@@ -322,7 +324,6 @@ const Cart = ({ navigation }) => {
     });
     order.bookingItems = bookingItems;
     order.totalPrice = calculateTotalPrice();
-    setLoader(true);
     // console.log("Payload:-",JSON.stringify(order, null, 4))
     if (data && data.token) {
       let resposne = await POSTCALL(
@@ -330,13 +331,13 @@ const Cart = ({ navigation }) => {
         order,
         data.token
       );
-      setLoader(false);
-      console.log("resposne:-", JSON.stringify(resposne, null, 4));
+      setResponse(resposne.responseData);
+      console.log("resposne:-", JSON.stringify(resposne.responseData, null, 4));
       if (resposne.responseData.success == true) {
-        dispatch(setCart([]));
-        dispatch(setSelectedDryCleaner({}));
+        // dispatch(setCart([]));
+        // dispatch(setSelectedDryCleaner({}));
         showMessage({
-          message: resposne.responseData.msg,
+          message: "checkout successful",
           type: "success",
           style: {
             alignItems: "center",
@@ -364,13 +365,11 @@ const Cart = ({ navigation }) => {
           },
           user_tok.token
         ).then((result) => {
-          console.log(result.responseData.url);
+          // console.log(result.responseData.url);
           setPaymentIntent(result.responseData.payment_intent);
           setDisplayStatus("flex");
           Linking.openURL(result.responseData.url);
         });
-
-        // navigation.navigate("UserMenu");
       } else {
         showMessage({
           message: "Error while booking!",
@@ -451,7 +450,7 @@ const Cart = ({ navigation }) => {
             position: "absolute",
             zIndex: 999,
             width: "100%",
-            bottom: 80,
+            bottom: 50,
           }}
         >
           {displayStatus === "none" ? (
@@ -462,7 +461,7 @@ const Cart = ({ navigation }) => {
                 marginHorizontal: 16,
                 marginBottom: 20,
                 height: 50,
-                borderRadius: 10,
+                borderRadius: 30,
                 justifyContent: "center",
                 alignItems: "center",
                 display: "none",
@@ -471,6 +470,7 @@ const Cart = ({ navigation }) => {
               <Text
                 style={{
                   color: "#fff",
+                  fontWeight: "bold",
                   fontSize: 20,
                 }}
               >
@@ -485,7 +485,7 @@ const Cart = ({ navigation }) => {
                 marginHorizontal: 16,
                 marginBottom: 20,
                 height: 50,
-                borderRadius: 10,
+                borderRadius: 30,
                 justifyContent: "center",
                 alignItems: "center",
               }}
@@ -493,6 +493,7 @@ const Cart = ({ navigation }) => {
               <Text
                 style={{
                   color: "#fff",
+                  fontWeight: "bold",
                   fontSize: 20,
                 }}
               >
