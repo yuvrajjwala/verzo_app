@@ -507,7 +507,56 @@ const Cart = ({ navigation }) => {
             bottom: 10,
           }}
         >
-          <CustomButton
+          {displayStatus === "none" ? (
+            <TouchableOpacity
+              onPress={bookOrder}
+              style={{
+                backgroundColor: "#F99025",
+                marginHorizontal: 16,
+                marginBottom: 20,
+                height: 50,
+                borderRadius: 30,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  color: "#fff",
+                  fontWeight: "bold",
+                  fontSize: 20,
+                }}
+              >
+                Confirm Checkout
+              </Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={bookOrder}
+              style={{
+                backgroundColor: "#F99025",
+                marginHorizontal: 16,
+                marginBottom: 20,
+                height: 50,
+                borderRadius: 30,
+                justifyContent: "center",
+                display: "none",
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  color: "#fff",
+                  fontWeight: "bold",
+                  fontSize: 20,
+                }}
+              >
+                Confirm Checkout
+              </Text>
+            </TouchableOpacity>
+          )}
+
+          {/* <CustomButton
             buttonText={"Confirm Checkout"}
             onPress={bookOrder}
             customStyle={{
@@ -523,7 +572,7 @@ const Cart = ({ navigation }) => {
               fontSize: 20,
               fontWeight: "bold",
             }}
-          />
+          /> */}
         </View>
       </View>
     </KeyboardAvoidingView>
