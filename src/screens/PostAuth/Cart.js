@@ -272,7 +272,7 @@ const Cart = ({ navigation }) => {
 
   const handlePayemnt = async () => {
     // sending other details for a success order and booking placement .
-    console.log(response);
+    // console.log(response);
     // {"dry_cleaning_booking_by_id": "63b926c5092e9b6fbc3845ea", "dry_cleaning_booking_id": "63b9ab477ebea46abb29bbae", "dry_cleaning_booking_total_price": "6", "msg": "Order placed successfully", "success": true}
     const bookingDetails = {
       booking_id: response.dry_cleaning_booking_id,
@@ -293,11 +293,7 @@ const Cart = ({ navigation }) => {
       user_tok.token
     );
     console.log(successfullBooking.responseData);
-    alert(
-      "Please keep you otp safe. Your one time otp : " +
-        successfullBooking.responseData.msg
-    );
-    navigation.navigate("UserMenu");
+    navigation.navigate("UserOrders");
   };
 
   const bookOrder = async () => {
