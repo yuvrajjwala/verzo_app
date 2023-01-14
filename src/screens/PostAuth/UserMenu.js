@@ -48,7 +48,7 @@ const UserMenu = ({ navigation }) => {
           style={styles.box}
         >
           <Text adjustsFontSizeToFit style={styles.boxText}>
-            My Booking List - car Parking
+            My Booking List - Car Parking
           </Text>
         </TouchableOpacity>
         <View style={{ width: 5 }} />
@@ -59,7 +59,7 @@ const UserMenu = ({ navigation }) => {
           }}
           style={styles.box}
         >
-          <Text style={styles.boxText}>Book a parking</Text>
+          <Text style={styles.boxText}>Book a Parking</Text>
         </TouchableOpacity>
       </View>
 
@@ -94,7 +94,7 @@ const UserMenu = ({ navigation }) => {
               Please enter your desirable pincode
             </Text>
             <TextInput
-              placeholder="Enter the Pincode"
+              placeholder="Enter the Zip Code"
               // value={pushData}
               style={{
                 height: 50,
