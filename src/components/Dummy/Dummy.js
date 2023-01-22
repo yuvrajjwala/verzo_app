@@ -31,7 +31,7 @@ export const profileData = [
   },
 
   {
-    name: 'Setting',
+    name: 'Update Information',
     svg: <Ionicons name="settings-outline" size={24} color={Colors.BLACK} />,
     screen: ScreenNames.EDIT_PROFILE,
   },
@@ -45,7 +45,7 @@ export const profileData = [
         color={Colors.BLACK}
       />
     ),
-    // screen: ScreenNames.CONTACT_US,
+    screen: ScreenNames.CONTACT_US,
   },
 
   {

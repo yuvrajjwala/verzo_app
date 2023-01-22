@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Alert, ScrollView, Image, Text,StyleSheet,SafeAreaView } from 'react-native';
+import { View, Alert, ScrollView, Image, Text,StyleSheet,SafeAreaView,Linking } from 'react-native';
 import { BLACK } from '../../global/colors';
 
 function PaymentMethods(props) {
@@ -10,10 +10,14 @@ function PaymentMethods(props) {
          </View>
          <View>
             <Text style={styles.paymentText}>We only prefer online payments.</Text>
+            <Text style={styles.informationText}>You can pay via your cards or Net banking. We accept almost all debit and credit cards for transaction.
+               We do not prefer cash after service to save time and efforts. We don't take your 
+               any personal Information with us like card number, pin, etc. We use Stripe Payment 
+               gateway for secure payments. If you find any problem please contact us at joward2001@vervoerapp.com.
+            </Text>
+            <Text  onPress={() => Linking.openURL('https://stripe.com/')} style={styles.knowMoreText}>Know More about Stripe?</Text>
          </View>
       </SafeAreaView>
-      
-      
    );
 }
 
@@ -33,6 +37,14 @@ const styles = StyleSheet.create({
       padding:20,
       fontSize:17,
       color:'orange'
+   },
+   informationText:{
+      padding:20,
+      lineHeight:23
+   },
+   knowMoreText:{
+      padding:20,
+      color:"orange",
    }
 })
 
