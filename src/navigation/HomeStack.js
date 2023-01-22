@@ -29,6 +29,8 @@ import EditParkingMerchantAbout from '../screens/PostAuth/parking_module/registe
 import EditParkingImage from '../screens/PostAuth/parking_module/register/EditMerchant/EditParkingImage';
 import PaymentMethods from '../screens/PostAuth/PaymentMethods';
 import ContactUs from '../screens/PostAuth/ContactUs';
+import FareCard from '../screens/PostAuth/Farecard';
+import TipsInfo from '../screens/PostAuth/TipsInfo';
 
 const Stack = createNativeStackNavigator();
 
@@ -54,6 +56,8 @@ const Homestack = () => {
       <Stack.Screen name="EditParkingAboutUs" component={EditParkingMerchantAbout} />
       <Stack.Screen name="PaymentMethods" component={PaymentMethods} />
       <Stack.Screen name="ContactUs" component={ContactUs} />
+      <Stack.Screen name="FareCard" component={FareCard} />
+      <Stack.Screen name="TipsInfo" component={TipsInfo} />
 
       <Stack.Screen name="DryCleanerList" component={DryCleanerList} />
       <Stack.Screen name="ItemsYouAccept" component={ItemsYouAccept} />

@@ -12,11 +12,11 @@ export const profileData = [
     screen: ScreenNames.EDIT_PROFILE,
   },
 
-  {
-    name: 'Fare Card',
-    svg: <Ionicons name="md-card-outline" size={24} color={Colors.BLACK} />,
-    // screen: ScreenNames.FARE_CARD,
-  },
+  // {
+  //   name: 'Fare Card',
+  //   svg: <Ionicons name="md-card-outline" size={24} color={Colors.BLACK} />,
+  //   screen: ScreenNames.FARE_CARD,
+  // },
 
   {
     name: 'Payment Methods',
@@ -25,13 +25,13 @@ export const profileData = [
   },
 
   {
-    name: 'Tips & Info',
+    name: 'Information',
     svg: <MCIcons name="car-info" size={24} color={Colors.BLACK} />,
-    // screen: ScreenNames.TIPS_INFO,
+    screen: ScreenNames.TIPS_INFO,
   },
 
   {
-    name: 'Update Information',
+    name: 'Update Details',
     svg: <Ionicons name="settings-outline" size={24} color={Colors.BLACK} />,
     screen: ScreenNames.EDIT_PROFILE,
   },
@@ -48,11 +48,11 @@ export const profileData = [
     screen: ScreenNames.CONTACT_US,
   },
 
-  {
-    name: 'Reset Password',
-    svg: <MCIcons name="lock-reset" size={24} color={Colors.BLACK} />,
-    // screen: ScreenNames.RESTAURANTDETAIL_SCREEN,
-  },
+  // {
+  //   name: 'Reset Password',
+  //   svg: <MCIcons name="lock-reset" size={24} color={Colors.BLACK} />,
+  //   // screen: ScreenNames.RESTAURANTDETAIL_SCREEN,
+  // },
 
   {
     name: 'Logout',
