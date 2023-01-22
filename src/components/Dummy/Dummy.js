@@ -21,7 +21,7 @@ export const profileData = [
   {
     name: 'Payment Methods',
     svg: <MCIcons name="bank-transfer" size={24} color={Colors.BLACK} />,
-    // screen: ScreenNames.PAYMENT_METHOD,
+    screen: ScreenNames.PAYMENT_METHOD,
   },
 
   {
@@ -33,7 +33,7 @@ export const profileData = [
   {
     name: 'Setting',
     svg: <Ionicons name="settings-outline" size={24} color={Colors.BLACK} />,
-    // screen: ScreenNames.SETTING,
+    screen: ScreenNames.EDIT_PROFILE,
   },
 
   {
