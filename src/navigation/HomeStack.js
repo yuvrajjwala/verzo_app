@@ -29,7 +29,7 @@ import EditParkingMerchantAbout from '../screens/PostAuth/parking_module/registe
 import EditParkingImage from '../screens/PostAuth/parking_module/register/EditMerchant/EditParkingImage';
 import PaymentMethods from '../screens/PostAuth/PaymentMethods';
 import ContactUs from '../screens/PostAuth/ContactUs';
-import FareCard from '../screens/PostAuth/Farecard';
+import FareCard from '../screens/PostAuth/FareCard';
 import TipsInfo from '../screens/PostAuth/TipsInfo';
 
 const Stack = createNativeStackNavigator();
