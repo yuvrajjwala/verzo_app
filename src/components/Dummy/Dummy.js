@@ -12,28 +12,28 @@ export const profileData = [
     screen: ScreenNames.EDIT_PROFILE,
   },
 
-  {
-    name: 'Fare Card',
-    svg: <Ionicons name="md-card-outline" size={24} color={Colors.BLACK} />,
-    // screen: ScreenNames.FARE_CARD,
-  },
+  // {
+  //   name: 'Fare Card',
+  //   svg: <Ionicons name="md-card-outline" size={24} color={Colors.BLACK} />,
+  //   screen: ScreenNames.FARE_CARD,
+  // },
 
   {
     name: 'Payment Methods',
     svg: <MCIcons name="bank-transfer" size={24} color={Colors.BLACK} />,
-    // screen: ScreenNames.PAYMENT_METHOD,
+    screen: ScreenNames.PAYMENT_METHOD,
   },
 
   {
-    name: 'Tips & Info',
+    name: 'Information',
     svg: <MCIcons name="car-info" size={24} color={Colors.BLACK} />,
-    // screen: ScreenNames.TIPS_INFO,
+    screen: ScreenNames.TIPS_INFO,
   },
 
   {
     name: 'Setting',
     svg: <Ionicons name="settings-outline" size={24} color={Colors.BLACK} />,
-    // screen: ScreenNames.SETTING,
+    screen: ScreenNames.SETTING,
   },
 
   {
@@ -45,14 +45,14 @@ export const profileData = [
         color={Colors.BLACK}
       />
     ),
-    // screen: ScreenNames.CONTACT_US,
+    screen: ScreenNames.CONTACT_US,
   },
 
-  {
-    name: 'Reset Password',
-    svg: <MCIcons name="lock-reset" size={24} color={Colors.BLACK} />,
-    // screen: ScreenNames.RESTAURANTDETAIL_SCREEN,
-  },
+  // {
+  //   name: 'Reset Password',
+  //   svg: <MCIcons name="lock-reset" size={24} color={Colors.BLACK} />,
+  //   // screen: ScreenNames.RESTAURANTDETAIL_SCREEN,
+  // },
 
   {
     name: 'Logout',

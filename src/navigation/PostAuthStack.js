@@ -5,6 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../global';
 import Homestack from './HomeStack';
 import Profilestack from './Profilestack';
+import NotificationStack from './NotificationStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -130,7 +131,7 @@ const PostAuthStack = () => {
             />
             <Tab.Screen
                 name="Notifications"
-                component={Homestack}
+                component={NotificationStack}
                 options={{
                     tabBarIcon: ({ focused }) =>
                         focused ? (

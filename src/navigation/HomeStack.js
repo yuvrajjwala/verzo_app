@@ -27,6 +27,12 @@ import BookingListUser from '../screens/PostAuth/parking_module/register/Booking
 import EditParkingMerchant from '../screens/PostAuth/parking_module/register/EditMerchant/EditParkingMerchant';
 import EditParkingMerchantAbout from '../screens/PostAuth/parking_module/register/EditMerchant/EditParkingMerchantAbout';
 import EditParkingImage from '../screens/PostAuth/parking_module/register/EditMerchant/EditParkingImage';
+import PaymentMethods from '../screens/PostAuth/PaymentMethods';
+import ContactUs from '../screens/PostAuth/ContactUs';
+import FareCard from '../screens/PostAuth/FareCard';
+import TipsInfo from '../screens/PostAuth/TipsInfo';
+import NotificationPage from '../screens/PostAuth/NotificationPage';
+import SettingPage from '../screens/PostAuth/settingPage';
 
 const Stack = createNativeStackNavigator();
 
@@ -50,6 +56,12 @@ const Homestack = () => {
       <Stack.Screen name="EditParkingMerchant" component={EditParkingMerchant} />
       <Stack.Screen name="EditParkingImage" component={EditParkingImage} />
       <Stack.Screen name="EditParkingAboutUs" component={EditParkingMerchantAbout} />
+      <Stack.Screen name="PaymentMethods" component={PaymentMethods} />
+      <Stack.Screen name="ContactUs" component={ContactUs} />
+      <Stack.Screen name="FareCard" component={FareCard} />
+      <Stack.Screen name="TipsInfo" component={TipsInfo} />
+      <Stack.Screen name="NotificationPage" component={NotificationPage} />
+      <Stack.Screen name="SettingPage" component={SettingPage} />
 
       <Stack.Screen name="DryCleanerList" component={DryCleanerList} />
       <Stack.Screen name="ItemsYouAccept" component={ItemsYouAccept} />
