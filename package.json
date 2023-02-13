@@ -28,7 +28,7 @@
     "react-native-dropdown-picker": "^5.4.2",
     "react-native-eject": "^0.2.0",
     "react-native-flash-message": "^0.3.1",
-    "react-native-gesture-handler": "^2.6.1",
+    "react-native-gesture-handler": "^2.9.0",
     "react-native-image-picker": "^4.10.0",
     "react-native-loading-spinner-overlay": "^3.0.1",
     "react-native-open-notification": "^0.1.4",
