@@ -5,7 +5,7 @@ const URL = {
   DEVELOPMENT_DRYCLEANING: "https://vervover-dry-cleaning.herokuapp.com/api/",
   PRODUCTION: "http://165.22.62.238/api/",
   // PRODUCTION: 'http://18.212.85.170:6000/',
-  TEST: "https://vervover-dry-cleaning.herokuapp.com/",
+  TEST: "https://vervoer-backend.herokuapp.com/",
   // TEST: "http://192.168.28.200/",
 };
 
