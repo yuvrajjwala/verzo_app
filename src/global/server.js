@@ -6,7 +6,7 @@ const URL = {
   PRODUCTION: "http://165.22.62.238/api/",
   // PRODUCTION: 'http://18.212.85.170:6000/',
   TEST: "https://vervoer-backend.herokuapp.com/",
-  // TEST: "http://192.168.28.200/",
+  // TEST: "http://192.168.0.107/",
 };
 
 export const BASE_URL = `${URL.TEST}`;
@@ -58,12 +58,20 @@ export const POSTCALL = async (apiUrl, bodyData, token = null, type = null) => {
     let postCallRes = await axios.post(`${BASE_URL}${apiUrl}/`, bodyData, {
       headers: headerObj,
     });
-    console.log("result" + postCallRes);
     return {
       status: postCallRes.status,
       responseData: postCallRes.data,
     };
   } catch (error) {
-    console.log(err);
+    return {
+      status: error.response.status,
+      responseData: {
+        success: error.response.data.success,
+        msg:
+          error.response.data.error.length == 0
+            ? JSON.stringify(error.response.data.error)
+            : JSON.stringify(error.response.data.error[0]),
+      },
+    };
   }
 };
