@@ -10,40 +10,38 @@ import {
   ImageBackground,
   Alert,
   ActivityIndicator,
-} from 'react-native';
-import React, { useState } from 'react';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Phone from '../../assets/svg/phone2.svg';
-import Lock from '../../assets/svg/lock.svg';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import BackArrowIcon from '../../assets/back.svg';
-import axios from 'axios';
-import { BASE_URL, POSTCALL } from '../../global/server';
-import { Colors, ScreenNames } from '../../global';
-import FocusAwareStatusBar from '../../components/FocusAwareStatusBar';
+} from "react-native";
+import React, { useState } from "react";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import Phone from "../../assets/svg/phone2.svg";
+import Lock from "../../assets/svg/lock.svg";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import BackArrowIcon from "../../assets/back.svg";
+import axios from "axios";
+import { BASE_URL, POSTCALL } from "../../global/server";
+import { Colors, ScreenNames } from "../../global";
+import FocusAwareStatusBar from "../../components/FocusAwareStatusBar";
 //   import { Set_Encrypted_AsyncStorage } from 'react-native-encrypted-asyncstorage';
-import TextInputGlobal from '../../components/TextInputGlobal';
-import { globalStyles } from '../../global/globalStyles';
-import * as UserAction from '../../redux/actions/userActions';
-import { connect } from 'react-redux';
-import { storeData,retrieveData } from '../../utils/Storage';
-import { useDispatch } from 'react-redux';
-import { changeAuthStatus } from '../../state/reducers/AuthReducer';
-import { showMessage } from 'react-native-flash-message';
-const { height, width } = Dimensions.get('window');
+import TextInputGlobal from "../../components/TextInputGlobal";
+import { globalStyles } from "../../global/globalStyles";
+import * as UserAction from "../../redux/actions/userActions";
+import { connect } from "react-redux";
+import { storeData, retrieveData } from "../../utils/Storage";
+import { useDispatch } from "react-redux";
+import { changeAuthStatus } from "../../state/reducers/AuthReducer";
+import { showMessage } from "react-native-flash-message";
+const { height, width } = Dimensions.get("window");
 
 const LoginScreen = ({ navigation }) => {
-
-  const [number, setNumber] = useState('');
-  const [password, setPassword] = useState('');
+  const [number, setNumber] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const disPatch = useDispatch();
 
-
   const loginHandler = async () => {
-    if (number !== '' && password !== '') {
+    if (number !== "" && password !== "") {
       setError(false);
       setLoading(true);
       const params = {
@@ -51,66 +49,71 @@ const LoginScreen = ({ navigation }) => {
         password: password,
       };
       try {
-        let response = await POSTCALL('auth/login', params);
+        let response = await POSTCALL("auth/login", params);
         setError(false);
         setLoading(false);
         if (response.responseData.success == true) {
-          await storeData("userdetails", { token: response.responseData.data.token, user: response.responseData.data.user })
-          disPatch(changeAuthStatus(true))
+          await storeData("userdetails", {
+            token: response.responseData.data.token,
+            user: response.responseData.data.user,
+          });
+          disPatch(changeAuthStatus(true));
         } else if (response.responseData.success == false) {
           showMessage({
             message: response.responseData.error,
             type: "danger",
           });
         } else {
-          return false
+          return false;
         }
       } catch (error) {
         setError(false);
         setLoading(false);
-        alert(error.message)
+        alert(error.message);
       }
-
     } else {
-      Alert.alert('Please Fill All the Details');
+      Alert.alert("Please Fill All the Details");
     }
   };
 
   return (
     <KeyboardAvoidingView
       style={{ flex: 1, backgroundColor: Colors.WHITE }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
       <FocusAwareStatusBar isLightBar={false} isTopSpace={true} />
       <View style={styles.screen}>
         <View style={{ paddingHorizontal: 10, paddingTop: 20 }}>
           <ImageBackground
-            source={require('../../assets/Background.png')}
-            style={{ width: width, height: height, position: 'absolute' }}
+            source={require("../../assets/Background.png")}
+            style={{ width: width, height: height, position: "absolute" }}
           />
           <View style={{ padding: 20 }}>
             <TouchableOpacity
               activeOpacity={0.8}
-              onPress={() => navigation.goBack()}>
-              <BackArrowIcon height={'30'} />
+              onPress={() => navigation.goBack()}
+            >
+              <BackArrowIcon height={"30"} />
             </TouchableOpacity>
             <Image
-              source={require('../../assets/Heading.png')}
+              source={require("../../assets/Heading.png")}
               style={{
                 height: 48,
                 width: 192,
-                resizeMode: 'contain',
-                alignSelf: 'center',
+                resizeMode: "contain",
+                alignSelf: "center",
                 marginVertical: 50,
               }}
             />
-            <View style={{ marginTop: 30 }}>
+            <View style={{ marginTop: 15 }}>
               <View style={{ marginBottom: 10 }}>
                 <Text
                   style={{
                     fontSize: 10,
                     color: Colors.GRAY_DARK,
                     marginBottom: 5,
-                  }}>
+                  }}
+                >
                   Phone Number
                 </Text>
                 <TextInputGlobal
@@ -122,15 +125,17 @@ const LoginScreen = ({ navigation }) => {
                   maxLength={10}
                 />
               </View>
-              <View style={{ marginBottom: 20 }}>
+              <View style={{ marginBottom: 10 }}>
                 <Text
                   style={{
                     fontSize: 10,
                     color: Colors.GRAY_DARK,
                     marginBottom: 5,
-                  }}>
+                  }}
+                >
                   Password
                 </Text>
+
                 <TextInputGlobal
                   Svg={<Lock />}
                   placeHolder="Enter Password"
@@ -138,19 +143,20 @@ const LoginScreen = ({ navigation }) => {
                   state={password}
                   secureTextEntry={true}
                 />
-
               </View>
+
               <TouchableOpacity
                 activeOpacity={0.8}
-                onPress={() => navigation.navigate('Forgot Password')}
+                onPress={() => navigation.navigate("ForgotPassword")}
               >
                 <Text
                   style={{
                     color: Colors.PRIMARY,
                     fontSize: 14,
-                    fontWeight: 'bold',
-                    alignSelf: 'flex-end',
-                  }}>
+                    fontWeight: "bold",
+                    alignSelf: "flex-end",
+                  }}
+                >
                   Forgot Password ?
                 </Text>
               </TouchableOpacity>
@@ -164,85 +170,94 @@ const LoginScreen = ({ navigation }) => {
               >
                 <Text
                   style={{
-                    color: '#FFFFFF',
+                    color: "#FFFFFF",
                     fontSize: 15,
-                    fontWeight: '500',
-                    textAlign: 'center',
-                  }}>
+                    fontWeight: "500",
+                    textAlign: "center",
+                  }}
+                >
                   Login
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 activeOpacity={0.8}
-                onPress={() => navigation.navigate('Registration')}
+                onPress={() => navigation.navigate("Registration")}
                 style={{
-                  marginVertical: 10
+                  marginVertical: 10,
                 }}
               >
                 <Text
                   style={{
                     color: Colors.PRIMARY,
                     fontSize: 14,
-                    fontWeight: 'bold',
-                    alignSelf: 'center'
-                  }}>
+                    fontWeight: "bold",
+                    alignSelf: "center",
+                  }}
+                >
                   Not a registered user ? Signup
                 </Text>
               </TouchableOpacity>
               <Text
-                style={{ color: '#808080', fontSize: 11, textAlign: 'center' }}>
+                style={{ color: "#808080", fontSize: 11, textAlign: "center" }}
+              >
                 Or Login with
               </Text>
               <View
                 style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
                   marginVertical: 20,
-                }}>
+                }}
+              >
                 <TouchableOpacity
                   activeOpacity={0.8}
                   style={{
-                    backgroundColor: 'white',
+                    backgroundColor: "white",
                     borderRadius: 100,
                     padding: 10,
                     elevation: 5,
-                  }}>
+                  }}
+                >
                   <AntDesign name="google" size={24} color="#808080" />
                 </TouchableOpacity>
                 <TouchableOpacity
                   activeOpacity={0.8}
                   style={{
-                    backgroundColor: 'white',
+                    backgroundColor: "white",
                     borderRadius: 100,
                     padding: 10,
                     paddingHorizontal: 15,
                     elevation: 5,
                     marginHorizontal: 20,
-                  }}>
+                  }}
+                >
                   <FontAwesome name="facebook" size={24} color="#808080" />
                 </TouchableOpacity>
                 <TouchableOpacity
                   activeOpacity={0.8}
                   style={{
-                    backgroundColor: 'white',
+                    backgroundColor: "white",
                     borderRadius: 100,
                     padding: 10,
                     elevation: 5,
-                  }}>
+                  }}
+                >
                   <AntDesign name="apple1" size={24} color="#808080" />
                 </TouchableOpacity>
               </View>
               {loading && (
                 <View
                   style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
                   <ActivityIndicator size="small" color="#000000" />
                   <Text
-                    style={{ fontSize: 15, color: '#000000', marginLeft: 10 }}>
+                    style={{ fontSize: 15, color: "#000000", marginLeft: 10 }}
+                  >
                     Please Wait!
                   </Text>
                 </View>
@@ -250,11 +265,12 @@ const LoginScreen = ({ navigation }) => {
               {error && (
                 <View
                   style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                  <Text style={{ fontSize: 15, color: 'red', marginLeft: 10 }}>
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Text style={{ fontSize: 15, color: "red", marginLeft: 10 }}>
                     User Not Registered!
                   </Text>
                 </View>
@@ -293,13 +309,13 @@ const LoginScreen = ({ navigation }) => {
       </View>
     </KeyboardAvoidingView>
   );
-}
+};
 
 export default LoginScreen;
 
 const styles = StyleSheet.create({
   screen: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
     flex: 1,
   },
 });
