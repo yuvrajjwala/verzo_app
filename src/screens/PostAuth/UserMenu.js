@@ -63,6 +63,17 @@ const UserMenu = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
+      <View style={styles.container}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("MyDeliveryList")}
+          style={styles.box}
+        >
+          <Text adjustsFontSizeToFit style={styles.boxText}>
+            My Delivery List
+          </Text>
+        </TouchableOpacity>
+      </View>
+
       <Modal
         animationType="fade"
         transparent={true}

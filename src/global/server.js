@@ -9,6 +9,7 @@ const URL = {
   // TEST: "http://192.168.0.107/",
 };
 
+// export const BASE_URL = "https://21c9-202-142-65-66.ngrok-free.app/";
 export const BASE_URL = `${URL.TEST}`;
 export const BASE_API_URL = `${URL.DEVELOPMENT_DRYCLEANING}`;
 

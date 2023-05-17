@@ -15,6 +15,7 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { useFocusEffect } from "@react-navigation/native";
 import { retrieveData } from "../../../../utils/Storage";
 import { GETCALL, POSTCALL } from "../../../../global/server";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const BookingListUser = ({ navigation }) => {
   const [loader, setLoader] = React.useState(false);
@@ -219,8 +220,38 @@ const BookingListUser = ({ navigation }) => {
             }}
           >
             {otps.length > 0
-              ? otps.find((otp) => otp.order_id === item._id).otp
+              ? otps.find((otp) => otp.order_id === item._id)?.otp
               : "4231"}
+          </Text>
+        </View>
+
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Text
+            onPress={() =>
+              navigation.navigate({
+                name: "QRCode",
+                params: {
+                  otp:
+                    otps.length > 0
+                      ? otps.find((otp) => otp.order_id === item._id).otp
+                      : "4231",
+                },
+              })
+            }
+            style={{
+              color: "red",
+              fontWeight: "bold",
+              fontSize: 20,
+              textAlign: "right",
+            }}
+          >
+            QR
           </Text>
         </View>
 

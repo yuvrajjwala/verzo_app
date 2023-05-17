@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,36 +6,106 @@ import {
   FlatList,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Modal,
+  Image,
 } from "react-native";
 import FocusAwareStatusBar from "../../components/FocusAwareStatusBar";
 import { Colors } from "../../global";
 import BackArrowIcon from "../../assets/back.svg";
-import Spinner from "react-native-loading-spinner-overlay";
 import { useFocusEffect } from "@react-navigation/native";
 import { retrieveData } from "../../utils/Storage";
 import { GETCALL, POSTCALL } from "../../global/server";
+import { Picker } from "@react-native-picker/picker";
+import { ScrollView } from "react-native-gesture-handler";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import DeliveryModal from "./DeliveryModel";
+
+const UserItem = ({ user, order_id }) => {
+  return (
+    <TouchableOpacity
+      style={{
+        padding: 10,
+        borderRadius: 5,
+      }}
+    >
+      <View style={styles.userItem}>
+        <Image
+          source={{
+            uri: "https://st5.depositphotos.com/1915171/64699/v/450/depositphotos_646996546-stock-illustration-user-profile-icon-avatar-person.jpg",
+          }}
+          style={styles.avatar}
+        />
+        <Text style={styles.phoneNumber}>{order_id}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
 
 const DryCleanerOrders = ({ navigation }) => {
   const [loader, setLoader] = React.useState(false);
   const [orders, setOrders] = React.useState([]);
   const [otpMap, setOtpMap] = React.useState();
+  const [zipCodeMap, setZipCodeMap] = React.useState();
+  const [selectedZipCode, setSelectedZipCode] = React.useState();
+  const [filteredOrders, setFilteredOrders] = React.useState([]);
+  const pickerRef = useRef();
+  const [data, setData] = useState([]);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [allUsers, setAllUsers] = React.useState([]);
+  const [currentSelectedOrder, setCurrentSelectedOrder] = React.useState([]);
+  const [allDeliveryDetails, setAllDeliveryDetails] = React.useState([]);
+  const showModal = (item) => {
+    setSelectedItem(item);
+  };
+
+  const openModal = () => {
+    return selectedItem != null;
+  };
+
+  const hideModal = () => {
+    setSelectedItem(null);
+  };
 
   useFocusEffect(
     React.useCallback(() => {
       fetchOrders();
+      fetchAllUsers();
+      fetchAllDeliveryBoyDetails();
+      console.log(zipCodeMap);
     }, [])
   );
+
+  const fetchAllUsers = async () => {
+    const allUser = await retrieveData("userdetails");
+    if (allUser && allUser.token) {
+      const users = await GETCALL("api/get-all-profile");
+      const userArray = users.responseData.data;
+      setAllUsers(userArray);
+    }
+  };
 
   const fetchOrders = async () => {
     setLoader(true);
     let data = await retrieveData("userdetails");
     if (data && data.token) {
       let response = await GETCALL("api/dry-cleaner/orders", data.token);
-      console.log(JSON.stringify(response, null, 4));
       setLoader(false);
       if (response.responseData.success) {
         setOtpMap(response.responseData.data.otpMap);
+        setZipCodeMap(response.responseData.data.zipCodeMap);
         setOrders(response.responseData.data.model);
+        setData(orders.map((order) => order._id));
+      }
+    }
+  };
+
+  const fetchAllDeliveryBoyDetails = async () => {
+    let data = await retrieveData("userdetails");
+    if (data && data.token) {
+      let response = await POSTCALL("api/delivery/fetch-delivery-all");
+      if (response.responseData.success) {
+        console.log(response?.responseData?.data?.model);
+        setAllDeliveryDetails(response?.responseData?.data?.model);
       }
     }
   };
@@ -288,7 +358,67 @@ const DryCleanerOrders = ({ navigation }) => {
             </View>
           );
         })}
+        <View style={{ height: 10 }} />
+        <View style={{ height: 1, backgroundColor: Colors.BORDER }} />
+        <View style={{ height: 10 }} />
+        <Text style={{ fontSize: 20, fontWeight: "bold", color: "black" }}>
+          {"Delivery Status"}
+        </Text>
+        <View style={{ height: 10 }} />
+        <View style={{ height: 10 }} />
+        <View style={{ height: 10 }} />
+
+        {allDeliveryDetails?.map((single, index) => {
+          return (
+            item._id === single.orderId && (
+              <View key={index} style={{ marginBottom: 10 }}>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Text
+                    style={{
+                      color: Colors.BLACK,
+                      fontSize: 16,
+                      fontWeight: "bold",
+                      textTransform: "capitalize",
+                    }}
+                  >
+                    {single?.assignedTo}
+                  </Text>
+                  <View style={{ width: 20 }} />
+                  <View
+                    style={{
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text>{single?.bookingStatus}</Text>
+                  </View>
+                </View>
+              </View>
+            )
+          );
+        })}
+
+        <View style={{ height: 10 }} />
+        <View style={{ height: 10 }} />
+
         <View style={{ flexDirection: "row", alignSelf: "flex-end" }}>
+          {item.bookingStatus == "pending" && (
+            <Text
+              onPress={() => {
+                showModal(item._id);
+                setCurrentSelectedOrder(item._id);
+              }}
+              style={{
+                color: "red",
+                fontWeight: "bold",
+                fontSize: 20,
+                textAlign: "right",
+              }}
+            >
+              Delivery Boy
+            </Text>
+          )}
+          <View style={{ width: 30 }} />
           {item.bookingStatus == "pending" && (
             <Text
               onPress={() => {
@@ -362,10 +492,80 @@ const DryCleanerOrders = ({ navigation }) => {
             </Text>
           </View>
         </View>
-
-        <View style={{ minHeight: 200 }}>
+        <View
+          style={{
+            marginTop: 80,
+            marginLeft: 30,
+            marginRight: 30,
+            marginBottom: 20,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 20,
+              color: Colors.BLACK,
+            }}
+          >
+            Zip Code
+          </Text>
+          <TouchableOpacity
+            onPress={() => {
+              pickerRef.current.focus();
+            }}
+            style={{
+              borderColor: Colors.GRAY_MEDIUM,
+              borderWidth: 1,
+              width: "100%",
+              color: "#000000",
+              fontSize: 15,
+              // width: width - 40,
+              borderRadius: 8,
+              marginTop: 5,
+            }}
+          >
+            <Picker
+              selectedValue={selectedZipCode}
+              mode={"dropdown"}
+              ref={pickerRef}
+              onValueChange={(itemValue, itemIndex) => {
+                const zipCodeDetails = zipCodeMap?.find(
+                  (z) => z.zipCode === selectedZipCode
+                );
+                const selectedOrder = orders?.filter((order) => {
+                  return order._id === zipCodeDetails?.bookingId && order;
+                });
+                setFilteredOrders(selectedOrder);
+                setSelectedZipCode(itemValue);
+              }}
+            >
+              {zipCodeMap?.map((zipCode, index) => {
+                return (
+                  <Picker.Item
+                    style={{
+                      color: Colors.BLACK,
+                    }}
+                    key={index}
+                    label={zipCode.zipCode}
+                    value={zipCode.zipCode}
+                  />
+                );
+              })}
+            </Picker>
+          </TouchableOpacity>
+        </View>
+        <ScrollView style={{ minHeight: 200 }}>
           <FlatList
-            data={orders}
+            data={
+              filteredOrders.length == 0
+                ? orders?.filter((order) => {
+                    return (
+                      order._id !==
+                        zipCodeMap?.find((z) => z.zipCode === selectedZipCode)
+                          ?.bookingId && order
+                    );
+                  })
+                : filteredOrders
+            }
             keyExtractor={(item, index) => index.toString()}
             renderItem={renderItems}
             contentContainerStyle={{
@@ -373,8 +573,22 @@ const DryCleanerOrders = ({ navigation }) => {
               paddingTop: 50,
             }}
           />
-        </View>
+        </ScrollView>
       </View>
+      {/* delivery Modal  */}
+      {selectedItem === null ? (
+        <></>
+      ) : (
+        <DeliveryModal
+          order_id={currentSelectedOrder}
+          closeModal={hideModal}
+          openModal={openModal}
+          allUsers={allUsers}
+        />
+      )}
+      {/* {selectedItem && (
+        
+      )} */}
     </KeyboardAvoidingView>
   );
 };

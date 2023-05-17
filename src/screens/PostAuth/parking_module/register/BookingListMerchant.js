@@ -11,7 +11,6 @@ import {
 import FocusAwareStatusBar from "../../../../components/FocusAwareStatusBar";
 import { Colors } from "../../../../global";
 import BackArrowIcon from "../../../../assets/back.svg";
-import Spinner from "react-native-loading-spinner-overlay";
 import { useFocusEffect } from "@react-navigation/native";
 import { retrieveData } from "../../../../utils/Storage";
 import { GETCALL, POSTCALL } from "../../../../global/server";
@@ -37,7 +36,9 @@ const BookingMerchantList = ({ navigation }) => {
       );
       let otps = await GETCALL("api/get_all_otps", data.token);
       setOtps(otps.responseData.otps);
-      console.log(response.responseData.data[0].bookingDetails);
+      // console.log(
+      //   "Booking deetails" + JSON.stringify(response.responseData.data[0])
+      // );
       // setLoader(false);
       if (response.responseData.success) {
         setOrders(response.responseData.data);
@@ -197,7 +198,7 @@ const BookingMerchantList = ({ navigation }) => {
           </Text>
         </View>
         <View style={{ height: 10 }} />
-        <View
+        {/* <View
           style={{
             flexDirection: "row",
             alignItems: "center",
@@ -207,7 +208,7 @@ const BookingMerchantList = ({ navigation }) => {
           <Text
             style={{ color: Colors.GREEN, fontSize: 18, fontWeight: "bold" }}
           >
-            Booking OTP
+            verfied
           </Text>
           <Text
             style={{
@@ -217,11 +218,41 @@ const BookingMerchantList = ({ navigation }) => {
               textTransform: "capitalize",
             }}
           >
-            {otps.length > 0
-              ? otps.find((otp) => otp.order_id === item._id).otp
-              : "4231"}
+            {item._id}
+          </Text>
+        </View> */}
+
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Text
+            onPress={() =>
+              navigation.navigate({
+                name: "QRCodeScanner",
+                params: {
+                  otp:
+                    otps.length > 0
+                      ? otps.find((otp) => otp.order_id === item._id)?.otp
+                      : "4231",
+                  booking_id: `${item._id}`,
+                },
+              })
+            }
+            style={{
+              color: "red",
+              fontWeight: "bold",
+              fontSize: 20,
+              textAlign: "right",
+            }}
+          >
+            SCAN
           </Text>
         </View>
+
         <View style={{ height: 10 }} />
         {item.bookingStatus == "booked" && (
           <>

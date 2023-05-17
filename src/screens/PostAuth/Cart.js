@@ -9,6 +9,7 @@ import {
   Linking,
   Image,
   Alert,
+  TextInput,
 } from "react-native";
 import FocusAwareStatusBar from "../../components/FocusAwareStatusBar";
 import { Colors } from "../../global";
@@ -22,11 +23,13 @@ import { POSTCALL } from "../../global/server";
 import { retrieveData } from "../../utils/Storage";
 import Spinner from "react-native-loading-spinner-overlay";
 import { setSelectedDryCleaner } from "../../state/reducers/DrycleanerReducer";
+import { ScrollView } from "react-native-gesture-handler";
 
 const Cart = ({ navigation }) => {
   const [displayStatus, setDisplayStatus] = React.useState("none");
   const [paymentIntent, setPaymentIntent] = React.useState("");
   const [response, setResponse] = React.useState();
+  const [zipCode, setZipCode] = React.useState("");
 
   const { cartList } = useSelector((state) => state.cartReducer);
   const { selectedDryCleaner } = useSelector(
@@ -283,10 +286,10 @@ const Cart = ({ navigation }) => {
     };
 
     const user_tok = await retrieveData("userdetails");
-    console.log(paymentIntent);
     const successfullBooking = await POSTCALL(
       "api/complete-order",
       {
+        zipCode: zipCode,
         paymentIntent: paymentIntent,
         booking_details: bookingDetails,
       },
@@ -428,9 +431,18 @@ const Cart = ({ navigation }) => {
             Total: $ {calculateTotalPrice()}
           </Text>
         </View>
-
-        <View style={{ minHeight: 200 }}>
+        <View style={{ top: 70 }}>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={(value) => {
+              setZipCode(value);
+            }}
+            placeholder="Enter you zipcode here"
+          />
+        </View>
+        <ScrollView style={{ top: 40 }}>
           <FlatList
+            style={{ minHeight: 200 }}
             data={cartList}
             keyExtractor={(item, index) => index.toString()}
             renderItem={renderItems}
@@ -439,7 +451,7 @@ const Cart = ({ navigation }) => {
               paddingTop: 50,
             }}
           />
-        </View>
+        </ScrollView>
 
         <View
           style={{
@@ -595,5 +607,22 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.43,
     shadowRadius: 9.51,
     elevation: 15,
+  },
+  textInput: {
+    // height: Platform.OS === "android" ? "auto" : 47,
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: Colors.GRAY_MEDIUM,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingLeft: 8,
+    color: Colors.BLACK,
+    marginHorizontal: 16,
+    marginBottom: 20,
+    height: 50,
+    borderRadius: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 999,
   },
 });
