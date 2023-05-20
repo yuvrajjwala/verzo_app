@@ -310,7 +310,7 @@ const UserOrders = ({ navigation }) => {
                 marginLeft: 15,
               }}
             >
-              Order Summary
+              Order Summary 1
             </Text>
           </View>
         </View>

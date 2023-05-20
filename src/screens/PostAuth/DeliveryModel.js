@@ -21,10 +21,13 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 const UserItem = ({ user, order_id, closeModal }) => {
   const bookDeliveryBoy = async () => {
+    let data = await retrieveData("userdetails");
+    console.log(data);
     let payload = {
       orderId: order_id,
       assignedTo: user._id,
       bookingStatus: "pending",
+      assignedBy: data.user._id,
     };
     console.log("working");
     let response = await POSTCALL("api/delivery/create-delivery", payload);

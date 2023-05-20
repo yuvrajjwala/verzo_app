@@ -7,17 +7,36 @@ import {
   TouchableOpacity,
   Dimensions,
   KeyboardAvoidingView,
+  ScrollView,
 } from "react-native";
 import FocusAwareStatusBar from "../../../../components/FocusAwareStatusBar";
 import { Colors } from "../../../../global";
 import { retrieveData } from "../../../../utils/Storage";
-import { POSTCALL } from "../../../../global/server";
+import { GETCALL, POSTCALL } from "../../../../global/server";
 import { useFocusEffect } from "@react-navigation/native";
 import BackArrowIcon from "../../../../assets/back.svg";
 
 const RenderBookingCard = ({ item }) => {
   const [deliveryStatus, setDeliveryStatus] = React.useState(
     item?.bookingStatus
+  );
+  const [address, setAddress] = React.useState("");
+  const fetchAddress = async () => {
+    let data = await retrieveData("userdetails");
+    if (data && data.token) {
+      let response = await GETCALL(
+        "api/get-my-dry-cleaner-profile",
+        data.token
+      );
+      if (response.responseData.success) {
+        setAddress(response?.responseData?.data?.about);
+      }
+    }
+  };
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchAddress();
+    }, [])
   );
   return (
     <View
@@ -95,6 +114,29 @@ const RenderBookingCard = ({ item }) => {
           }}
         >
           {deliveryStatus}
+        </Text>
+      </View>
+
+      <View style={{ height: 10 }} />
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Text style={{ color: Colors.BLACK, fontSize: 16, fontWeight: "bold" }}>
+          Dry Cleaner Address :
+        </Text>
+        <Text
+          style={{
+            color: "blue",
+            fontSize: 16,
+            fontWeight: "bold",
+            textTransform: "capitalize",
+          }}
+        >
+          {address || "No Address"}
         </Text>
       </View>
 
@@ -204,11 +246,11 @@ const MyDeliveryList = ({ navigation }) => {
           </View>
         </View>
       </View>
-      <View style={{ minHeight: 200, marginTop: 50 }}>
+      <ScrollView style={{ minHeight: 200, marginTop: 50 }}>
         {deliveryDetails?.map((deliveryDetail) => {
           return <RenderBookingCard item={deliveryDetail} />;
         })}
-      </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };
