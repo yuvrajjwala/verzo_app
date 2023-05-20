@@ -204,6 +204,7 @@ export const DeliveryBoyShowModal = ({
                 marginBottom: 15,
                 display: "flex",
                 flexDirection: "column",
+                padding: 10,
               }}
             >
               {delivery.map((single, index) => {
