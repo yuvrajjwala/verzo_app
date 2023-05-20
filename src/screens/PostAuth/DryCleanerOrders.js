@@ -54,6 +54,7 @@ const DryCleanerOrders = ({ navigation }) => {
   const [allUsers, setAllUsers] = React.useState([]);
   const [currentSelectedOrder, setCurrentSelectedOrder] = React.useState([]);
   const [allDeliveryDetails, setAllDeliveryDetails] = React.useState([]);
+  const [paymentStatus, setPaymentStatus] = React.useState([]);
   const showModal = (item) => {
     setSelectedItem(item);
   };
@@ -71,7 +72,6 @@ const DryCleanerOrders = ({ navigation }) => {
       fetchOrders();
       fetchAllUsers();
       fetchAllDeliveryBoyDetails();
-      console.log(zipCodeMap);
     }, [])
   );
 
@@ -91,6 +91,7 @@ const DryCleanerOrders = ({ navigation }) => {
       let response = await GETCALL("api/dry-cleaner/orders", data.token);
       setLoader(false);
       if (response.responseData.success) {
+        setPaymentStatus(response.responseData.data.paymentStatus);
         setOtpMap(response.responseData.data.otpMap);
         setZipCodeMap(response.responseData.data.zipCodeMap);
         setOrders(response.responseData.data.model);
@@ -104,7 +105,6 @@ const DryCleanerOrders = ({ navigation }) => {
     if (data && data.token) {
       let response = await POSTCALL("api/delivery/fetch-delivery-all");
       if (response.responseData.success) {
-        console.log(response?.responseData?.data?.model);
         setAllDeliveryDetails(response?.responseData?.data?.model);
       }
     }
@@ -117,7 +117,7 @@ const DryCleanerOrders = ({ navigation }) => {
       orderId: item._id,
     };
     if (data && data.token) {
-      let response = await POSTCALL("order/cancel", payload, data.token);
+      let response = await POSTCALL("api/order/cancel", payload, data.token);
       setLoader(false);
       if (response.responseData.success) {
         fetchOrders();
@@ -132,7 +132,7 @@ const DryCleanerOrders = ({ navigation }) => {
       orderId: item._id,
     };
     if (data && data.token) {
-      let response = await POSTCALL("order/confirm", payload, data.token);
+      let response = await POSTCALL("api/order/confirm", payload, data.token);
       setLoader(false);
       if (response.responseData.success) {
         fetchOrders();
@@ -142,235 +142,180 @@ const DryCleanerOrders = ({ navigation }) => {
 
   const renderItems = ({ item, cartIndex }) => {
     return (
-      <View
-        style={{
-          margin: 15,
-          borderRadius: 5,
-          overflow: "hidden",
-          backgroundColor: Colors.WHITE,
-          padding: 10,
-          ...styles.shadow,
-        }}
-      >
+      paymentStatus?.find((payment) => {
+        return payment.bookingId === item._id;
+      })?.paymentStatus && (
         <View
           style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
+            margin: 15,
+            borderRadius: 5,
+            overflow: "hidden",
+            backgroundColor: Colors.WHITE,
+            padding: 10,
+            ...styles.shadow,
           }}
         >
-          <Text
-            style={{ color: Colors.BLACK, fontSize: 16, fontWeight: "bold" }}
-          >
-            Order From
-          </Text>
-          <Text
+          <View
             style={{
-              color: Colors.BLACK,
-              fontSize: 16,
-              fontWeight: "bold",
-              textTransform: "capitalize",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
             }}
           >
-            {item.bookingByUserName}
-          </Text>
-        </View>
-        <View style={{ height: 10 }} />
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Text
-            style={{ color: Colors.BLACK, fontSize: 16, fontWeight: "bold" }}
-          >
-            Total Price
-          </Text>
-          <Text
+            <Text
+              style={{ color: Colors.BLACK, fontSize: 16, fontWeight: "bold" }}
+            >
+              Order From
+            </Text>
+            <Text
+              style={{
+                color: Colors.BLACK,
+                fontSize: 16,
+                fontWeight: "bold",
+                textTransform: "capitalize",
+              }}
+            >
+              {item.bookingByUserName}
+            </Text>
+          </View>
+          <View style={{ height: 10 }} />
+          <View
             style={{
-              color: Colors.BLACK,
-              fontSize: 16,
-              fontWeight: "bold",
-              textTransform: "capitalize",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
             }}
           >
-            {item.totalPrice}
-          </Text>
-        </View>
-        <View style={{ height: 10 }} />
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Text
-            style={{ color: Colors.BLACK, fontSize: 16, fontWeight: "bold" }}
-          >
-            Payment Type
-          </Text>
-          <Text
+            <Text
+              style={{ color: Colors.BLACK, fontSize: 16, fontWeight: "bold" }}
+            >
+              Total Price
+            </Text>
+            <Text
+              style={{
+                color: Colors.BLACK,
+                fontSize: 16,
+                fontWeight: "bold",
+                textTransform: "capitalize",
+              }}
+            >
+              {item.totalPrice}
+            </Text>
+          </View>
+          <View style={{ height: 10 }} />
+          <View
             style={{
-              color: Colors.BLACK,
-              fontSize: 16,
-              fontWeight: "bold",
-              textTransform: "capitalize",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
             }}
           >
-            {item.paymentBy}
-          </Text>
-        </View>
-        <View style={{ height: 10 }} />
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Text
-            style={{ color: Colors.BLACK, fontSize: 16, fontWeight: "bold" }}
-          >
-            Booking Status
-          </Text>
-          <Text
+            <Text
+              style={{ color: Colors.BLACK, fontSize: 16, fontWeight: "bold" }}
+            >
+              Payment Type
+            </Text>
+            <Text
+              style={{
+                color: Colors.BLACK,
+                fontSize: 16,
+                fontWeight: "bold",
+                textTransform: "capitalize",
+              }}
+            >
+              {item.paymentBy}
+            </Text>
+          </View>
+          <View style={{ height: 10 }} />
+          <View
             style={{
-              color: Colors.BLACK,
-              fontSize: 16,
-              fontWeight: "bold",
-              textTransform: "capitalize",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
             }}
           >
-            {item.bookingStatus}
-          </Text>
-        </View>
-        <View style={{ height: 10 }} />
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Text
-            style={{ color: Colors.BLACK, fontSize: 16, fontWeight: "bold" }}
-          >
-            Payment Status
-          </Text>
-          <Text
+            <Text
+              style={{ color: Colors.BLACK, fontSize: 16, fontWeight: "bold" }}
+            >
+              Booking Status
+            </Text>
+            <Text
+              style={{
+                color: Colors.BLACK,
+                fontSize: 16,
+                fontWeight: "bold",
+                textTransform: "capitalize",
+              }}
+            >
+              {item.bookingStatus}
+            </Text>
+          </View>
+          <View style={{ height: 10 }} />
+          <View
             style={{
-              color: Colors.BLACK,
-              fontSize: 16,
-              fontWeight: "bold",
-              textTransform: "capitalize",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
             }}
           >
-            Paid
-          </Text>
-        </View>
+            <Text
+              style={{ color: Colors.BLACK, fontSize: 16, fontWeight: "bold" }}
+            >
+              Payment Status
+            </Text>
+            <Text
+              style={{
+                color: Colors.BLACK,
+                fontSize: 16,
+                fontWeight: "bold",
+                textTransform: "capitalize",
+              }}
+            >
+              {paymentStatus?.find((payment) => {
+                return payment.bookingId === item._id;
+              })?.paymentStatus || "Pending"}
+            </Text>
+          </View>
 
-        <View style={{ height: 10 }} />
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Text
-            style={{ color: Colors.GREEN, fontSize: 20, fontWeight: "bold" }}
-          >
-            OTP
-          </Text>
-          <Text
+          <View style={{ height: 10 }} />
+          <View
             style={{
-              color: Colors.GREEN,
-              fontSize: 20,
-              fontWeight: "bold",
-              textTransform: "capitalize",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
             }}
           >
-            {otpMap.find((otpMapObj) => otpMapObj.bookingId === item._id)
-              ? otpMap.find((otpMapObj) => otpMapObj.bookingId === item._id).otp
-              : "2134"}
+            <Text
+              style={{ color: Colors.GREEN, fontSize: 20, fontWeight: "bold" }}
+            >
+              OTP
+            </Text>
+            <Text
+              style={{
+                color: Colors.GREEN,
+                fontSize: 20,
+                fontWeight: "bold",
+                textTransform: "capitalize",
+              }}
+            >
+              {otpMap.find((otpMapObj) => otpMapObj.bookingId === item._id)
+                ? otpMap.find((otpMapObj) => otpMapObj.bookingId === item._id)
+                    .otp
+                : "2134"}
+            </Text>
+          </View>
+
+          <View style={{ height: 10 }} />
+          <View style={{ height: 1, backgroundColor: Colors.BORDER }} />
+          <View style={{ height: 10 }} />
+          <Text
+            style={{ color: Colors.BLACK, fontSize: 16, fontWeight: "bold" }}
+          >
+            Booked Items
           </Text>
-        </View>
-
-        <View style={{ height: 10 }} />
-        <View style={{ height: 1, backgroundColor: Colors.BORDER }} />
-        <View style={{ height: 10 }} />
-        <Text style={{ color: Colors.BLACK, fontSize: 16, fontWeight: "bold" }}>
-          Booked Items
-        </Text>
-        <View style={{ height: 10 }} />
-        {item.bookingItems.map((single, index) => {
-          return (
-            <View key={index} style={{ marginBottom: 10 }}>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Text
-                  style={{
-                    color: Colors.BLACK,
-                    fontSize: 16,
-                    fontWeight: "bold",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  {index + 1}. {single.itemName}
-                </Text>
-                <View style={{ width: 20 }} />
-                <View
-                  style={{
-                    width: 30,
-                    height: 30,
-                    borderRadius: 15,
-                    backgroundColor: "#F99025",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: Colors.WHITE,
-                      fontSize: 16,
-                      fontWeight: "bold",
-                      textTransform: "capitalize",
-                    }}
-                  >
-                    {single.itemQuantity}
-                  </Text>
-                </View>
-              </View>
-
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Text
-                  style={{
-                    color: Colors.BLUE,
-                    fontWeight: "bold",
-                    fontSize: 16,
-                  }}
-                >
-                  {"" + Object.keys(single.itemAttributes)}
-                </Text>
-              </View>
-            </View>
-          );
-        })}
-        <View style={{ height: 10 }} />
-        <View style={{ height: 1, backgroundColor: Colors.BORDER }} />
-        <View style={{ height: 10 }} />
-        <Text style={{ fontSize: 20, fontWeight: "bold", color: "black" }}>
-          {"Delivery Status"}
-        </Text>
-        <View style={{ height: 10 }} />
-        <View style={{ height: 10 }} />
-        <View style={{ height: 10 }} />
-
-        {allDeliveryDetails?.map((single, index) => {
-          return (
-            item._id === single.orderId && (
+          <View style={{ height: 10 }} />
+          {item.bookingItems.map((single, index) => {
+            return (
               <View key={index} style={{ marginBottom: 10 }}>
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                   <Text
@@ -381,77 +326,143 @@ const DryCleanerOrders = ({ navigation }) => {
                       textTransform: "capitalize",
                     }}
                   >
-                    {single?.assignedTo}
+                    {index + 1}. {single.itemName}
                   </Text>
                   <View style={{ width: 20 }} />
                   <View
                     style={{
+                      width: 30,
+                      height: 30,
+                      borderRadius: 15,
+                      backgroundColor: "#F99025",
                       justifyContent: "center",
                       alignItems: "center",
                     }}
                   >
-                    <Text>{single?.bookingStatus}</Text>
+                    <Text
+                      style={{
+                        color: Colors.WHITE,
+                        fontSize: 16,
+                        fontWeight: "bold",
+                        textTransform: "capitalize",
+                      }}
+                    >
+                      {single.itemQuantity}
+                    </Text>
                   </View>
                 </View>
+
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Text
+                    style={{
+                      color: Colors.BLUE,
+                      fontWeight: "bold",
+                      fontSize: 16,
+                    }}
+                  >
+                    {"" + Object.keys(single.itemAttributes)}
+                  </Text>
+                </View>
               </View>
-            )
-          );
-        })}
+            );
+          })}
+          <View style={{ height: 10 }} />
+          <View style={{ height: 1, backgroundColor: Colors.BORDER }} />
+          <View style={{ height: 10 }} />
+          <Text style={{ fontSize: 20, fontWeight: "bold", color: "black" }}>
+            {"Delivery Status : "}
+          </Text>
+          <View style={{ height: 10 }} />
+          <View style={{ height: 10 }} />
+          <View style={{ height: 10 }} />
 
-        <View style={{ height: 10 }} />
-        <View style={{ height: 10 }} />
+          {allDeliveryDetails?.map((single, index) => {
+            return (
+              item._id === single.orderId && (
+                <View key={index} style={{ marginBottom: 10 }}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: Colors.BLACK,
+                        fontSize: 16,
+                        fontWeight: "bold",
+                        textTransform: "capitalize",
+                      }}
+                    >
+                      {allUsers?.find((user) => {
+                        return user._id === single?.assignedTo;
+                      })?.phoneNumber || single?.assignedTo}
+                    </Text>
+                    <View style={{ width: 20 }} />
+                    <View
+                      style={{
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: "bold",
+                          color:
+                            single?.bookingStatus === "confirmed"
+                              ? "blue"
+                              : "red",
+                        }}
+                      >
+                        {single?.bookingStatus}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              )
+            );
+          })}
 
-        <View style={{ flexDirection: "row", alignSelf: "flex-end" }}>
-          {item.bookingStatus == "pending" && (
-            <Text
+          <View style={{ height: 10 }} />
+          <View style={{ height: 10 }} />
+
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-around" }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                acceptOrder(item);
+              }}
+              style={styles.ButtonContainer}
+              disabled={item.bookingStatus === "confirmed"}
+            >
+              <Text style={styles.ButtonText}>Approve</Text>
+            </TouchableOpacity>
+            <View style={{ width: 30 }} />
+            <TouchableOpacity
+              onPress={() => {
+                cancelOrder(item);
+              }}
+              disabled={item.bookingStatus === "cancelled"}
+              style={[styles.ButtonContainer, { backgroundColor: "red" }]}
+            >
+              <Text style={styles.ButtonText}>Cancel</Text>
+            </TouchableOpacity>
+            <View style={{ width: 30 }} />
+            <TouchableOpacity
               onPress={() => {
                 showModal(item._id);
                 setCurrentSelectedOrder(item._id);
               }}
-              style={{
-                color: "red",
-                fontWeight: "bold",
-                fontSize: 20,
-                textAlign: "right",
-              }}
+              style={styles.ButtonContainer}
             >
-              Delivery Boy
-            </Text>
-          )}
-          <View style={{ width: 30 }} />
-          {item.bookingStatus == "pending" && (
-            <Text
-              onPress={() => {
-                acceptOrder(item);
-              }}
-              style={{
-                color: "red",
-                fontWeight: "bold",
-                fontSize: 20,
-                textAlign: "right",
-              }}
-            >
-              Approve
-            </Text>
-          )}
-          <View style={{ width: 30 }} />
-          {item.bookingStatus == "pending" && (
-            <Text
-              onPress={() => {
-                cancelOrder(item);
-              }}
-              style={{
-                color: "red",
-                fontWeight: "bold",
-                fontSize: 20,
-                textAlign: "right",
-              }}
-            >
-              Cancel
-            </Text>
-          )}
+              <Text style={styles.ButtonText}>Delivery Boy</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      )
     );
   };
 
@@ -609,5 +620,20 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.43,
     shadowRadius: 9.51,
     elevation: 15,
+  },
+  ButtonContainer: {
+    elevation: 8,
+    backgroundColor: "#009688",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    margin: 0,
+  },
+  ButtonText: {
+    fontSize: 18,
+    color: "#fff",
+    fontWeight: "bold",
+    alignSelf: "center",
+    textTransform: "uppercase",
   },
 });

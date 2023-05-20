@@ -50,7 +50,14 @@ const UserItem = ({ user, order_id, closeModal }) => {
           }}
           style={styles.avatar}
         />
-        <Text style={styles.phoneNumber}>{user.phoneNumber}</Text>
+        <Text
+          style={[
+            styles.phoneNumber,
+            { color: "red", fontSize: 24, fontWeight: "bold" },
+          ]}
+        >
+          {user.phoneNumber}
+        </Text>
       </View>
     </TouchableOpacity>
   );

@@ -19,6 +19,8 @@ const UserOrders = ({ navigation }) => {
   const [loader, setLoader] = React.useState(false);
   const [orders, setOrders] = React.useState([]);
   const [otpMap, setOtpMap] = React.useState();
+  const [paymentStatus, setPaymentStatus] = React.useState([]);
+
   useFocusEffect(
     React.useCallback(() => {
       fetchOrders();
@@ -33,6 +35,7 @@ const UserOrders = ({ navigation }) => {
       setLoader(false);
       if (response.responseData.success) {
         setOtpMap(response.responseData.data.otpMap);
+        setPaymentStatus(response.responseData.data.paymentStatus);
         setOrders(response.responseData.data.model);
       }
     }
@@ -158,7 +161,9 @@ const UserOrders = ({ navigation }) => {
               textTransform: "capitalize",
             }}
           >
-            Paid
+            {paymentStatus?.find((payment) => {
+              return payment.bookingId === item._id;
+            })?.paymentStatus || "Pending"}
           </Text>
         </View>
 

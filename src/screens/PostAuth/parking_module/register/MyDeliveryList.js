@@ -88,7 +88,7 @@ const RenderBookingCard = ({ item }) => {
         </Text>
         <Text
           style={{
-            color: Colors.BLACK,
+            color: "blue",
             fontSize: 16,
             fontWeight: "bold",
             textTransform: "capitalize",
