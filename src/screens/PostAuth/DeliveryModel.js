@@ -63,7 +63,12 @@ const UserItem = ({ user, order_id, closeModal }) => {
   );
 };
 
-const DeliveryModal = ({ allUsers, order_id, openModal, closeModal }) => {
+export const DeliveryModal = ({
+  allUsers,
+  order_id,
+  openModal,
+  closeModal,
+}) => {
   return (
     <>
       {/* delivery Modal  */}
@@ -121,7 +126,139 @@ const DeliveryModal = ({ allUsers, order_id, openModal, closeModal }) => {
   );
 };
 
-export default DeliveryModal;
+export const DeliveryBoyShowModal = ({
+  allUsers,
+  order_id,
+  openModal,
+  closeModal,
+}) => {
+  const [delivery, setDelivery] = React.useState([
+    {
+      _id: "123",
+      orderId: "456",
+      assignedTo: "John",
+      bookingStatus: "Confirmed",
+      created_at: "2023-05-20",
+      updated_at: "2023-05-21",
+      __v: 1,
+    },
+  ]);
+  const fetchAllDeliveryBoyDetails = async () => {
+    let data = await retrieveData("userdetails");
+    if (data && data.token) {
+      let response = await POSTCALL("api/delivery/fetch-delivery-all");
+      if (response.responseData.success) {
+        const delivery = response?.responseData?.data?.model;
+        delivery.filter((delivery) => delivery.orderId === order_id);
+        setDelivery(
+          delivery.filter((delivery) => delivery.orderId === order_id)
+        );
+      }
+    }
+  };
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchAllDeliveryBoyDetails();
+    }, [])
+  );
+  return (
+    <>
+      {/* delivery Modal  */}
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible={true}
+        onRequestClose={closeModal}
+      >
+        <View
+          style={{
+            border: 2,
+            borderColor: "red",
+            flex: 1,
+            marginTop: 42,
+          }}
+        >
+          <View
+            style={{
+              flex: 1,
+              alignItems: "flex-end",
+              width: "90%",
+              marginLeft: 20,
+            }}
+          >
+            <TouchableOpacity onPress={closeModal}>
+              <FontAwesome name="times" size={24} color="#f57d7d" />
+            </TouchableOpacity>
+          </View>
+          <View style={{ flex: 8 }}>
+            <ScrollView
+              style={{
+                borderWidth: 1,
+                borderColor: "#615b5b",
+                width: "90%",
+                marginLeft: 20,
+                borderRadius: 12,
+                marginBottom: 15,
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              {delivery.map((single, index) => {
+                return (
+                  <View key={index} style={{ marginBottom: 10 }}>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          color: Colors.BLACK,
+                          fontSize: 16,
+                          fontWeight: "bold",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        {allUsers?.find((user) => {
+                          return user._id === single?.assignedTo;
+                        })?.phoneNumber || single?.assignedTo}
+                      </Text>
+                      <View style={{ width: 20 }} />
+                      <View
+                        style={{
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 18,
+                            fontWeight: "bold",
+                            color:
+                              single?.bookingStatus === "confirmed"
+                                ? "blue"
+                                : "red",
+                          }}
+                        >
+                          {single?.bookingStatus}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                );
+              })}
+            </ScrollView>
+          </View>
+          <View style={{ flex: 1 }}></View>
+        </View>
+      </Modal>
+    </>
+  );
+};
+
+// export default DeliveryModal;
 
 const styles = StyleSheet.create({
   screen: {
@@ -160,3 +297,36 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+// import React, { useState } from 'react';
+
+// const MyComponent = () => {
+//   const [myArray, setMyArray] = useState([
+//     { id: 1, name: 'Object 1' },
+//     { id: 2, name: 'Object 2' },
+//     { id: 3, name: 'Object 3' },
+//   ]);
+
+//   const updateObject = (objectId, newName) => {
+//     setMyArray(prevArray => {
+//       const updatedArray = prevArray.map(obj => {
+//         if (obj.id === objectId) {
+//           return { ...obj, name: newName };
+//         }
+//         return obj;
+//       });
+//       return updatedArray;
+//     });
+//   };
+
+//   return (
+//     <div>
+//       {myArray.map(obj => (
+//         <div key={obj.id}>{obj.name}</div>
+//       ))}
+//       <button onClick={() => updateObject(2, 'Updated Object 2')}>Update Object 2</button>
+//     </div>
+//   );
+// };
+
+// export default MyComponent;

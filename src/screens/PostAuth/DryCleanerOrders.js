@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   Modal,
   Image,
+  Alert,
 } from "react-native";
 import FocusAwareStatusBar from "../../components/FocusAwareStatusBar";
 import { Colors } from "../../global";
@@ -18,7 +19,7 @@ import { GETCALL, POSTCALL } from "../../global/server";
 import { Picker } from "@react-native-picker/picker";
 import { ScrollView } from "react-native-gesture-handler";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import DeliveryModal from "./DeliveryModel";
+import { DeliveryModal, DeliveryBoyShowModal } from "./DeliveryModel";
 
 const UserItem = ({ user, order_id }) => {
   return (
@@ -55,6 +56,9 @@ const DryCleanerOrders = ({ navigation }) => {
   const [currentSelectedOrder, setCurrentSelectedOrder] = React.useState([]);
   const [allDeliveryDetails, setAllDeliveryDetails] = React.useState([]);
   const [paymentStatus, setPaymentStatus] = React.useState([]);
+  const [selectedDeliveryBoyModal, setSelectedDeliveryBoyModal] =
+    React.useState(null);
+
   const showModal = (item) => {
     setSelectedItem(item);
   };
@@ -65,6 +69,18 @@ const DryCleanerOrders = ({ navigation }) => {
 
   const hideModal = () => {
     setSelectedItem(null);
+  };
+
+  const showDeliveryBoyModal = (item) => {
+    setSelectedDeliveryBoyModal(item);
+  };
+
+  const openDeliveryBoyModal = () => {
+    return selectedDeliveryBoyModal != null;
+  };
+
+  const hideDeliveryBoyModal = () => {
+    setSelectedDeliveryBoyModal(null);
   };
 
   useFocusEffect(
@@ -369,61 +385,18 @@ const DryCleanerOrders = ({ navigation }) => {
           <View style={{ height: 10 }} />
           <View style={{ height: 1, backgroundColor: Colors.BORDER }} />
           <View style={{ height: 10 }} />
-          <Text style={{ fontSize: 20, fontWeight: "bold", color: "black" }}>
-            {"Delivery Status : "}
-          </Text>
-          <View style={{ height: 10 }} />
-          <View style={{ height: 10 }} />
+
           <View style={{ height: 10 }} />
 
-          {allDeliveryDetails?.map((single, index) => {
-            return (
-              item._id === single.orderId && (
-                <View key={index} style={{ marginBottom: 10 }}>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: Colors.BLACK,
-                        fontSize: 16,
-                        fontWeight: "bold",
-                        textTransform: "capitalize",
-                      }}
-                    >
-                      {allUsers?.find((user) => {
-                        return user._id === single?.assignedTo;
-                      })?.phoneNumber || single?.assignedTo}
-                    </Text>
-                    <View style={{ width: 20 }} />
-                    <View
-                      style={{
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 18,
-                          fontWeight: "bold",
-                          color:
-                            single?.bookingStatus === "confirmed"
-                              ? "blue"
-                              : "red",
-                        }}
-                      >
-                        {single?.bookingStatus}
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              )
-            );
-          })}
+          <TouchableOpacity
+            onPress={() => {
+              showDeliveryBoyModal(item._id);
+              setCurrentSelectedOrder(item._id);
+            }}
+            style={styles.ButtonContainer}
+          >
+            <Text style={styles.ButtonText}>Delivery Boy List</Text>
+          </TouchableOpacity>
 
           <View style={{ height: 10 }} />
           <View style={{ height: 10 }} />
@@ -433,6 +406,12 @@ const DryCleanerOrders = ({ navigation }) => {
           >
             <TouchableOpacity
               onPress={() => {
+                Alert.alert(
+                  "Booking Status",
+                  "Booking Confirmed",
+                  [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+                  { cancelable: false }
+                );
                 acceptOrder(item);
               }}
               style={styles.ButtonContainer}
@@ -443,6 +422,12 @@ const DryCleanerOrders = ({ navigation }) => {
             <View style={{ width: 30 }} />
             <TouchableOpacity
               onPress={() => {
+                Alert.alert(
+                  "Booking Status",
+                  "Booking Cancelled",
+                  [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+                  { cancelable: false }
+                );
                 cancelOrder(item);
               }}
               disabled={item.bookingStatus === "cancelled"}
@@ -503,6 +488,7 @@ const DryCleanerOrders = ({ navigation }) => {
             </Text>
           </View>
         </View>
+
         <View
           style={{
             marginTop: 80,
@@ -548,6 +534,7 @@ const DryCleanerOrders = ({ navigation }) => {
                 setFilteredOrders(selectedOrder);
                 setSelectedZipCode(itemValue);
               }}
+              style={{ color: "#000" }}
             >
               {zipCodeMap?.map((zipCode, index) => {
                 return (
@@ -564,6 +551,7 @@ const DryCleanerOrders = ({ navigation }) => {
             </Picker>
           </TouchableOpacity>
         </View>
+
         <ScrollView style={{ minHeight: 200 }}>
           <FlatList
             data={
@@ -597,9 +585,17 @@ const DryCleanerOrders = ({ navigation }) => {
           allUsers={allUsers}
         />
       )}
-      {/* {selectedItem && (
-        
-      )} */}
+      {/* delivery Modal  */}
+      {selectedDeliveryBoyModal === null ? (
+        <></>
+      ) : (
+        <DeliveryBoyShowModal
+          order_id={currentSelectedOrder}
+          closeModal={hideDeliveryBoyModal}
+          openModal={openDeliveryBoyModal}
+          allUsers={allUsers}
+        />
+      )}
     </KeyboardAvoidingView>
   );
 };
