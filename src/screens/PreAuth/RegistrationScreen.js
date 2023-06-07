@@ -55,44 +55,43 @@ const RegistrationScreen = ({ navigation }) => {
         });
         alert(errorMessage);
         error.length = 0;
-      }
+      } else {
+        const params = {
+          phoneNumber: number,
+          password,
+          dob: dob,
+        };
+        try {
+          let response = await POSTCALL("api/signup", params);
 
-      const params = {
-        phoneNumber: number,
-        password,
-        dob: dob,
-      };
+          setError(false);
+          setLoading(false);
 
-      try {
-        let response = await POSTCALL("api/signup", params);
-
-        setError(false);
-        setLoading(false);
-
-        if (response.responseData.success == true) {
-          showMessage({
-            message: response.responseData.msg,
-            description: "Please Login",
-            type: "success",
-          });
-          setTimeout(() => {
-            hideMessage();
-            navigation.navigate("Login");
-          }, 1000);
-        } else if (response.responseData.success == false) {
-          showMessage({
-            message: response.responseData.error,
-            description: "Please Login",
-            type: "danger",
-          });
-        } else {
-          return false;
+          if (response.responseData.success == true) {
+            showMessage({
+              message: response.responseData.msg,
+              description: "Please Login",
+              type: "success",
+            });
+            setTimeout(() => {
+              hideMessage();
+              navigation.navigate("Login");
+            }, 1000);
+          } else if (response.responseData.success == false) {
+            showMessage({
+              message: response.responseData.error,
+              description: "Please Login",
+              type: "danger",
+            });
+          } else {
+            return false;
+          }
+        } catch (error) {
+          console.log(error);
+          setError(false);
+          setLoading(false);
+          alert(error.message);
         }
-      } catch (error) {
-        console.log(error);
-        setError(false);
-        setLoading(false);
-        alert(error.message);
       }
     } else {
       Alert.alert("Please Fill All the Details");

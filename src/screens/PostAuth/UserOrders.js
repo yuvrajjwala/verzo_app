@@ -10,7 +10,6 @@ import {
 import FocusAwareStatusBar from "../../components/FocusAwareStatusBar";
 import { Colors } from "../../global";
 import BackArrowIcon from "../../assets/back.svg";
-import Spinner from "react-native-loading-spinner-overlay";
 import { useFocusEffect } from "@react-navigation/native";
 import { retrieveData } from "../../utils/Storage";
 import { GETCALL, POSTCALL } from "../../global/server";
@@ -18,7 +17,10 @@ import { GETCALL, POSTCALL } from "../../global/server";
 const UserOrders = ({ navigation }) => {
   const [loader, setLoader] = React.useState(false);
   const [orders, setOrders] = React.useState([]);
+  const [dryCleaners, setDryCleaners] = React.useState([]);
   const [otpMap, setOtpMap] = React.useState();
+  const [paymentStatus, setPaymentStatus] = React.useState([]);
+
   useFocusEffect(
     React.useCallback(() => {
       fetchOrders();
@@ -28,12 +30,16 @@ const UserOrders = ({ navigation }) => {
   const fetchOrders = async () => {
     setLoader(true);
     let data = await retrieveData("userdetails");
+    // console.log(data);
     if (data && data.token) {
       let response = await GETCALL("api/users/orders", data.token);
+      // console.log(JSON.stringify(response));
       setLoader(false);
       if (response.responseData.success) {
         setOtpMap(response.responseData.data.otpMap);
+        setPaymentStatus(response.responseData.data.paymentStatus);
         setOrders(response.responseData.data.model);
+        setDryCleaners(response.responseData.data.dryCleaners);
       }
     }
   };
@@ -46,7 +52,6 @@ const UserOrders = ({ navigation }) => {
     };
     if (data && data.token) {
       let response = await POSTCALL("api/order/cancel", payload, data.token);
-      console.log(response);
       setLoader(false);
       if (response.responseData.success) {
         fetchOrders();
@@ -66,6 +71,7 @@ const UserOrders = ({ navigation }) => {
           ...styles.shadow,
         }}
       >
+        <View style={{ height: 10 }} />
         <View
           style={{
             flexDirection: "row",
@@ -76,17 +82,29 @@ const UserOrders = ({ navigation }) => {
           <Text
             style={{ color: Colors.BLACK, fontSize: 16, fontWeight: "bold" }}
           >
-            Dry Cleaner Name
+            Dry Cleaner Name & Address
           </Text>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "flex-end",
+          }}
+        >
           <Text
             style={{
               color: Colors.BLACK,
               fontSize: 16,
               fontWeight: "bold",
               textTransform: "capitalize",
+              textAlign: "right",
             }}
           >
-            {item.bookingToDryCleanerName}
+            {
+              dryCleaners.find((dryc) => {
+                return dryc.userId === item.bookingTo && dryc;
+              })?.about
+            }
           </Text>
         </View>
         <View style={{ height: 10 }} />
@@ -158,7 +176,9 @@ const UserOrders = ({ navigation }) => {
               textTransform: "capitalize",
             }}
           >
-            Paid
+            {paymentStatus?.find((payment) => {
+              return payment.bookingId === item._id;
+            })?.paymentStatus || "Pending"}
           </Text>
         </View>
 

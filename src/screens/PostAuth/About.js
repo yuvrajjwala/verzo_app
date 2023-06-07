@@ -62,13 +62,17 @@ const About = ({ navigation }) => {
         <Header />
         <View style={{ marginTop: 20 }} />
         <View style={{ marginHorizontal: 32 }}>
-          <Text style={{ color: "#000", fontSize: 22 }}>About</Text>
+          <Text style={{ color: "#000", fontSize: 22 }}>Name And Address</Text>
           <View style={{ height: 20 }} />
           <TextInput
+            multiline
             style={styles.textArea}
-            value={
-              dryCleanerProfile.about == "" ? about : dryCleanerProfile.about
-            }
+            onKeyPress={({ nativeEvent }) => {
+              if (nativeEvent.key === "Enter") {
+                setAbout(about + "\n");
+              }
+            }}
+            value={about}
             onChangeText={(data) => {
               setAbout(data);
             }}
