@@ -78,7 +78,7 @@ const UserOrders = ({ navigation }) => {
           >
             Dry Cleaner Name
           </Text>
-          <Text
+          <Text onPress={()=>console.log(item)}
             style={{
               color: Colors.BLACK,
               fontSize: 16,

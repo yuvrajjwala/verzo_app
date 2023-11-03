@@ -60,7 +60,7 @@ const OnboardingScreen = () => {
                 />
                 <View style={{ paddingLeft: 20 }}>
                     <Animated.Text style={{ fontSize: 25, color: '#000000', left: value }}>
-                        Rides, Parking
+                        Parking
                     </Animated.Text>
                     <Animated.Text style={{ fontSize: 25, color: '#000000', left: value1 }}>
                         & Dry Cleaning
