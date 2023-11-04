@@ -78,7 +78,7 @@ const UserOrders = ({ navigation }) => {
           >
             Dry Cleaner Name
           </Text>
-          <Text onPress={()=>console.log(item)}
+          <Text
             style={{
               color: Colors.BLACK,
               fontSize: 16,
@@ -87,6 +87,54 @@ const UserOrders = ({ navigation }) => {
             }}
           >
             {item.bookingToDryCleanerName}
+          </Text>
+        </View>
+        <View style={{ height: 10 }} />
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Text
+            style={{ color: Colors.BLACK, fontSize: 16, fontWeight: "bold" }}
+          >
+            Pickup Location
+          </Text>
+          <Text
+            style={{
+              color: Colors.BLACK,
+              fontSize: 16,
+              fontWeight: "bold",
+              textTransform: "capitalize",
+            }}
+          >
+            {item.pickupLocation || "-"}
+          </Text>
+        </View>
+        <View style={{ height: 10 }} />
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Text
+            style={{ color: Colors.BLACK, fontSize: 16, fontWeight: "bold" }}
+          >
+            Drop Location
+          </Text>
+          <Text
+            style={{
+              color: Colors.BLACK,
+              fontSize: 16,
+              fontWeight: "bold",
+              textTransform: "capitalize",
+            }}
+          >
+            {item.dropLocation || "-"}
           </Text>
         </View>
         <View style={{ height: 10 }} />
